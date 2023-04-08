@@ -18,27 +18,40 @@ struct ContentView: View {
     
     var body: some View {
         ZStack {
-            VStack(spacing: 20) {
-                VStack {
-                    Text("Tap the flag of")
-                        .font(.title3)
-                    Text(countriesList[correctAnswer])
-                        .font(.largeTitle.weight(.bold))
-                }
-                .padding()
+            LinearGradient(colors: [.blue, .black], startPoint: .top, endPoint: .bottom)
+                .edgesIgnoringSafeArea(.all)
+            
+            VStack {
+                Spacer()
+                Text("Guess the Flag")
+                    .font(.largeTitle.bold())
+                    .foregroundColor(.white)
                 
-                ForEach(0..<3) { number in
-                    Button {
-                        flagTapped(number)
-                    } label: {
-                        Image(countriesList[number].lowercased())
-                            .resizable()
-                            .frame(maxWidth: 240, maxHeight: 120)
+                VStack(spacing: 30) {
+                    VStack {
+                        Text("Tap the flag of:")
+                            .font(.subheadline.weight(.heavy))
+                            .foregroundStyle(.white)
+                        Text(countriesList[correctAnswer])
+                            .font(.largeTitle.weight(.bold))
+                            .foregroundColor(.white)
                     }
-                    .cornerRadius(10)
-                    .shadow(radius: 10)
+                    .padding()
                     
+                    ForEach(0..<3) { number in
+                        Button {
+                            flagTapped(number)
+                        } label: {
+                            Image(countriesList[number].lowercased())
+                                .resizable()
+                                .frame(maxWidth: 240, maxHeight: 120)
+                        }
+                        .cornerRadius(10)
+                        .shadow(color: .secondary, radius: 10)
+                        
+                    }
                 }
+                Spacer()
             }
         }
         .alert(resultTitle, isPresented: $showingResult) {

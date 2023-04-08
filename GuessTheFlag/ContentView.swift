@@ -13,21 +13,23 @@ struct ContentView: View {
     
     @State private var correctAnswer = Int.random(in: 0...2)
     
+    @State private var resultTitle: String = ""
+    @State private var showingResult = false
+    
     var body: some View {
         ZStack {
             VStack(spacing: 20) {
                 VStack {
                     Text("Tap the flag of")
-                        .font(.title)
+                        .font(.title3)
                     Text(countriesList[correctAnswer])
-                        .font(.title)
-                        .bold()
+                        .font(.largeTitle.weight(.bold))
                 }
                 .padding()
                 
                 ForEach(0..<3) { number in
                     Button {
-                        //
+                        flagTapped(number)
                     } label: {
                         Image(countriesList[number].lowercased())
                             .resizable()
@@ -39,6 +41,25 @@ struct ContentView: View {
                 }
             }
         }
+        .alert(resultTitle, isPresented: $showingResult) {
+            Button("Continue", action: askQuestion)
+        } message: {
+            Text("Your answer is \(resultTitle)")
+            }
+    }
+    func flagTapped(_ number: Int) {
+        if number == correctAnswer {
+            resultTitle = "Correct"
+        } else {
+            resultTitle = "Wrong"
+        }
+        
+        showingResult = true
+    }
+    
+    func askQuestion() {
+        countriesList.shuffle()
+        correctAnswer = Int.random(in: 0...2)
     }
 }
 

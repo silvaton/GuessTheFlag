@@ -17,6 +17,9 @@ struct ContentView: View {
     @State private var resultTitle: String = ""
     @State private var score: Int = 0
     @State private var showingResult = false
+    @State private var remainingRounds = 8
+    @State private var alertTitle = ""
+    @State private var roundString = "rounds"
     
     var body: some View {
         ZStack {
@@ -28,7 +31,7 @@ struct ContentView: View {
                 Text("Guess the Flag")
                     .font(.largeTitle.bold())
                     .foregroundColor(.white)
-                
+
                 VStack(spacing: 30) {
                     VStack {
                         Text("Tap the flag of:")
@@ -57,17 +60,44 @@ struct ContentView: View {
             }
         }
         .alert("\(resultTitle)!", isPresented: $showingResult) {
-            Button("Continue", action: askQuestion)
+            Button(alertTitle, action: askQuestion)
         } message: {
-            if resultTitle == "Wrong" {
-                Text("Wrong! You selected the flag of \(countriesList[userChoice]) and your current score is \(score).")
+            if resultTitle == "Wrong" && alertTitle == "Continue" {
+                Text("Wrong! You selected the flag of \(countriesList[userChoice]).\n Your current score is \(score) and you have \(remainingRounds) more \(roundString).")
+            } else if resultTitle == "Correct" && alertTitle == "Continue" {
+                Text("Your answer is \(resultTitle).\n Your current score is \(score) and you have \(remainingRounds) more \(roundString).")
             } else {
-                Text("Your answer is \(resultTitle) and your current score is \(score).")
-                
+                Text("\(resultTitle)! You selected the flag of \(countriesList[userChoice]).\n Your final score is \(score).")
             }
         }
     }
+    
     func flagTapped(_ number: Int) {
+        if remainingRounds != 1 {
+            remainingRounds -= 1
+            checkUserChoice(number)
+            updateRoundString()
+            alertTitle = "Continue"
+        } else {
+            remainingRounds -= 1
+            alertTitle = "Restart"
+            checkUserChoice(number)
+            userChoice = number
+        }
+        showingResult = true
+    }
+    
+    func askQuestion() {
+        if remainingRounds == 0 {
+            remainingRounds = 8
+            score = 0
+            roundString = "rounds"
+        }
+        countriesList.shuffle()
+        correctAnswer = Int.random(in: 0...2)
+    }
+    
+    fileprivate func checkUserChoice(_ number: Int) {
         userChoice = number
         if userChoice == correctAnswer {
             resultTitle = "Correct"
@@ -75,15 +105,13 @@ struct ContentView: View {
         } else {
             resultTitle = "Wrong"
             score -= 1
-            
         }
-        
-        showingResult = true
     }
     
-    func askQuestion() {
-        countriesList.shuffle()
-        correctAnswer = Int.random(in: 0...2)
+    fileprivate func updateRoundString() {
+        if remainingRounds < 2 {
+            roundString = "round"
+        }
     }
 }
 

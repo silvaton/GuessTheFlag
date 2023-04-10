@@ -14,6 +14,7 @@ struct ContentView: View {
     @State private var correctAnswer = Int.random(in: 0...2)
     
     @State private var resultTitle: String = ""
+    @State private var score: Int = 0
     @State private var showingResult = false
     
     var body: some View {
@@ -57,14 +58,16 @@ struct ContentView: View {
         .alert(resultTitle, isPresented: $showingResult) {
             Button("Continue", action: askQuestion)
         } message: {
-            Text("Your answer is \(resultTitle)")
+            Text("Your answer is \(resultTitle) and you current score is \(score)")
             }
     }
     func flagTapped(_ number: Int) {
         if number == correctAnswer {
             resultTitle = "Correct"
+            score += 1
         } else {
             resultTitle = "Wrong"
+            score -= 1
         }
         
         showingResult = true

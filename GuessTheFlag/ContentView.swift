@@ -12,6 +12,7 @@ struct ContentView: View {
     @State private var countriesList = ["Argentina", "Brazil", "Estonia", "France", "Germany", "Ghana", "Ireland", "Israel", "Italy", "Monaco", "Morroco", "Nigeria", "Poland", "Russia", "Spain", "UK", "US"].shuffled()
     
     @State private var correctAnswer = Int.random(in: 0...2)
+    @State private var userChoice: Int = 0
     
     @State private var resultTitle: String = ""
     @State private var score: Int = 0
@@ -55,19 +56,26 @@ struct ContentView: View {
                 Spacer()
             }
         }
-        .alert(resultTitle, isPresented: $showingResult) {
+        .alert("\(resultTitle)!", isPresented: $showingResult) {
             Button("Continue", action: askQuestion)
         } message: {
-            Text("Your answer is \(resultTitle) and you current score is \(score)")
+            if resultTitle == "Wrong" {
+                Text("Wrong! You selected the flag of \(countriesList[userChoice]) and your current score is \(score).")
+            } else {
+                Text("Your answer is \(resultTitle) and your current score is \(score).")
+                
             }
+        }
     }
     func flagTapped(_ number: Int) {
-        if number == correctAnswer {
+        userChoice = number
+        if userChoice == correctAnswer {
             resultTitle = "Correct"
             score += 1
         } else {
             resultTitle = "Wrong"
             score -= 1
+            
         }
         
         showingResult = true

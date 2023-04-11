@@ -23,23 +23,23 @@ struct ContentView: View {
     
     var body: some View {
         ZStack {
-            LinearGradient(colors: [.blue, .black], startPoint: .top, endPoint: .bottom)
-                .edgesIgnoringSafeArea(.all)
+    //        LinearGradient(colors: [.blue, .black], startPoint: .top, endPoint: .bottom)
+    //            .edgesIgnoringSafeArea(.all)
             
             VStack {
                 Spacer()
                 Text("Guess the Flag")
                     .font(.largeTitle.bold())
-                    .foregroundColor(.white)
+                    .foregroundColor(.black)
 
                 VStack(spacing: 30) {
                     VStack {
                         Text("Tap the flag of:")
                             .font(.subheadline.weight(.heavy))
-                            .foregroundStyle(.white)
+                            .foregroundStyle(.black)
                         Text(countriesList[correctAnswer])
                             .font(.largeTitle.weight(.bold))
-                            .foregroundColor(.white)
+                            .foregroundColor(.black)
                     }
                     .padding()
                     

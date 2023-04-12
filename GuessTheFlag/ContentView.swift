@@ -51,9 +51,7 @@ struct ContentView: View {
                                 .resizable()
                                 .frame(maxWidth: 240, maxHeight: 120)
                         }
-                        .cornerRadius(10)
-                        .shadow(color: .secondary, radius: 10)
-                        
+                        .modifier(FlagImage())                        
                     }
                 }
                 Spacer()
@@ -118,5 +116,13 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+    }
+}
+
+struct FlagImage: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .cornerRadius(10)
+            .shadow(color: .secondary, radius: 10)
     }
 }
